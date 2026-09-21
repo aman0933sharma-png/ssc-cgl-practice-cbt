@@ -264,6 +264,14 @@ input:focus, select:focus { border-color: var(--ink); }
   .exam-header { grid-template-columns: 1fr 1fr; }
 }
 
+
+.verdict { margin: 16px 20px 0; padding: 16px 18px; border: 1px solid var(--line); border-radius: 8px; background: #fafafa; }
+.verdict.pass { background: #fff; border-color: #111; }
+.verdict.fail { background: #fff; }
+.verdict-kicker { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 800; margin-bottom: 4px; }
+.verdict h3 { font-family: "Shippori Mincho", serif; font-size: 22px; margin-bottom: 6px; }
+.verdict p { font-size: 14px; line-height: 1.55; color: var(--ink); }
+
 </style>
 </head>
 <body>
@@ -426,6 +434,11 @@ input:focus, select:focus { border-color: var(--ink); }
         <p id="autoNote" class="hidden" style="padding:10px 20px 0;color:#c62828;font-size:13px;font-weight:600">
           Time over — paper auto-submitted.
         </p>
+        <div class="verdict" id="verdictBox">
+          <div class="verdict-kicker" id="verdictKicker">Result</div>
+          <h3 id="verdictTitle">—</h3>
+          <p id="verdictText"></p>
+        </div>
         <div class="score-hero">
           <div class="score-ring" id="scoreRing" style="--p:0%"><span id="finalScore">0</span></div>
           <div class="stats">
@@ -889,6 +902,28 @@ window.QUESTION_BANK = {
     show("resultScreen");
     $("autoNote").classList.toggle("hidden", !auto);
     $("finalScore").textContent = r.marks.toFixed(2);
+    const PASS = 90;
+    const passed = r.marks >= PASS;
+    const praise = [
+      "You crossed 90. That is a clean Tier-I cut. Hold this standard.",
+      "Qualified on this paper. Your accuracy held under the 15-minute lock. Keep that calm.",
+      "Pass mark cleared. Treat the next mock the same way: no panic, no leftover minutes wasted.",
+      "You made the cut. Appreciation where it is due — now lock Quant and GA the same way."
+    ];
+    const motivate = [
+      "90 is the line. You are short today, not finished. One more paper tonight.",
+      "A miss here is data, not a verdict. Count the wrong answers, fix those types, sit again.",
+      "Failing a mock is cheaper than failing the hall. Stand up. Next set starts now.",
+      "Marks follow repetition. Open the review, write the error list, attempt another paper.",
+      "You did not reach 90 yet. That only means the next 15-minute section still has room to grow."
+    ];
+    const box = $("verdictBox");
+    box.className = "verdict " + (passed ? "pass" : "fail");
+    $("verdictKicker").textContent = passed ? "Qualified  ·  pass mark 90 / 200" : "Not qualified  ·  pass mark 90 / 200";
+    $("verdictTitle").textContent = passed ? "You passed this mock" : "You did not pass this mock";
+    const pool = passed ? praise : motivate;
+    $("verdictText").textContent = pool[Math.floor(Math.random() * pool.length)] +
+      " Your score: " + r.marks.toFixed(2) + " / 200.";
     const pct = Math.max(0, Math.min(100, (r.marks / 200) * 100));
     $("scoreRing").style.setProperty("--p", pct + "%");
     $("stC").textContent = r.correct;
