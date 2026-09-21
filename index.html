@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SSC CGL Tier-1 Practice CBT</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #toast {
+      position: fixed; top: 14px; left: 50%; transform: translateX(-50%) translateY(-20px);
+      background: #0d47a1; color: #fff; padding: 10px 16px; border-radius: 4px;
+      font-size: 13px; font-weight: 700; opacity: 0; pointer-events: none; z-index: 80;
+      transition: .25s ease;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+  <div id="toast"></div>
+  <section id="welcomeScreen" class="screen welcome active">
+    <div class="welcome-card">
+      <div class="w-head">
+        <div class="emblem">SSC</div>
+        <div>
+          <h1>Staff Selection Commission</h1>
+          <p>CGL Tier-I Practice CBT · Unofficial practice website</p>
+        </div>
+      </div>
+      <div class="w-body">
+        <div class="badge-row">
+          <span class="badge">Practice website</span>
+          <span class="badge">100 Questions</span>
+          <span class="badge">200 Marks</span>
+          <span class="badge">60 Minutes</span>
+          <span class="badge">15 min / section</span>
+          <span class="badge">+2 / −0.50</span>
+          <span class="badge">New paper every attempt</span>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>Candidate name</label>
+            <input id="inpName" value="Aman Sharma" maxlength="40" />
+          </div>
+          <div>
+            <label>Roll number (optional)</label>
+            <input id="inpRoll" placeholder="Auto-generated if blank" />
+          </div>
+        </div>
+        <button class="primary pulse" id="goInstr">Proceed to Instructions</button>
+        <p class="note">
+          Practice only. Each start draws a fresh randomised previous-year style paper.
+          Layout follows the new SSC CBT: palette on the left, Save &amp; Next on top,
+          15-minute sectional lock as in CGL 2026. Not an official SSC product.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section id="instrScreen" class="screen instr-wrap">
+    <div class="topbar-mini">
+      <strong>SSC CGL PRACTICE TEST</strong>
+      <span>Read all instructions carefully</span>
+    </div>
+    <div class="instr-box">
+      <h2>General Instructions — CGL Tier-I Practice</h2>
+      <ol>
+        <li>Total duration is <b>60 minutes</b>. Each of the four parts is locked to <b>15 minutes</b>.</li>
+        <li>100 questions: Reasoning 25, GA 25, Quant 25, English 25.</li>
+        <li>Correct = <b>+2</b>. Wrong = <b>−0.50</b>. Unattempted = 0.</li>
+        <li>A new random paper is generated every time you start.</li>
+        <li>Select an option with the radio button, then press <b>Save and Next</b>.</li>
+        <li><b>Mark for Review</b> parks a question inside the same 15-minute section.</li>
+        <li>When a section timer hits 00:00 you move to the next part automatically.</li>
+      </ol>
+      <h3>Question palette colours</h3>
+      <div class="legend">
+        <div class="lg"><span class="dot nv">1</span> Not visited</div>
+        <div class="lg"><span class="dot na">2</span> Not answered</div>
+        <div class="lg"><span class="dot an">3</span> Answered</div>
+        <div class="lg"><span class="dot mr">4</span> Marked for review</div>
+        <div class="lg"><span class="dot am">5</span> Answered + review</div>
+      </div>
+      <label class="agree">
+        <input type="checkbox" id="agreeBox" />
+        <span>I have read the instructions and I am ready to begin this practice test.</span>
+      </label>
+      <div class="btn-row">
+        <button class="ghost" id="backWelcome">Back</button>
+        <button class="primary" id="startBtn" disabled style="width:auto">I am ready to begin</button>
+      </div>
+    </div>
+  </section>
+  <section id="examScreen" class="screen exam">
+    <header class="exam-header">
+      <div>
+        <div class="brand">SSC CGL PRACTICE TEST</div>
+        <div class="tools">
+          Text size:
+          <select id="fontSize">
+            <option>Small</option>
+            <option selected>Medium</option>
+            <option>Large</option>
+          </select>
+          <span class="zoom">
+            <button type="button" id="zoomOut">−</button>
+            <button type="button" id="zoomIn">+</button>
+          </span>
+        </div>
+      </div>
+      <div class="cand">
+        <b id="candName">Candidate</b>
+        <span id="candRoll">Roll : —</span>
+      </div>
+      <div class="timer-box" id="timerBox">
+        <div class="lbl">Section time left</div>
+        <div class="time" id="secTimer">15:00</div>
+        <div class="lbl">Total left <span id="totTimer">60:00</span></div>
+      </div>
+      <div class="photos">
+        <div class="ph">Photo placeholder</div>
+        <div class="ph">Invigilator photo</div>
+      </div>
+    </header>
+    <div class="exam-sub">
+      <button class="btn-prev" id="btnPrev">Previous</button>
+      <button class="btn-mfr" id="btnReview">Mark for Review</button>
+      <button class="btn-sn" id="btnSaveNext">Save and Next</button>
+      <button class="btn-clr" id="btnClear">Clear Response</button>
+      <button class="btn-sub" id="btnSubmit">Submit</button>
+      <span class="answered-count" id="answeredCount">Total Questions answered: 0</span>
+    </div>
+    <div class="exam-body">
+      <aside class="palette-col">
+        <div class="sec-tabs">
+          <button class="on">A Reasoning</button>
+          <button>B GA</button>
+          <button>C Quant</button>
+          <button>D English</button>
+        </div>
+        <div class="pal-meta" id="palMeta"></div>
+        <div class="grid" id="grid"></div>
+      </aside>
+      <main class="q-area">
+        <div class="q-top">
+          <span class="qn" id="qNo">Question No. 1</span>
+          <span class="lang">Select Language: <select><option>ENGLISH</option><option>HINDI</option></select></span>
+        </div>
+        <div class="q-text" id="qText"></div>
+        <div class="q-src" id="qSrc"></div>
+        <div class="options" id="options"></div>
+      </main>
+    </div>
+  </section>
+  <section id="resultScreen" class="screen result">
+    <div class="result-inner">
+      <div class="result-card">
+        <div class="rc-head">
+          <h2>Practice test submitted</h2>
+          <p style="opacity:.85;font-size:13px;margin-top:4px">CGL Tier-I practice · +2 / −0.50</p>
+        </div>
+        <p id="autoNote" class="hidden" style="padding:10px 20px 0;color:#c62828;font-size:13px;font-weight:600">Time over — paper auto-submitted.</p>
+        <div class="score-hero">
+          <div class="score-ring" id="scoreRing" style="--p:0%"><span id="finalScore">0</span></div>
+          <div class="stats">
+            <div class="st"><b id="stC">0</b><span>Correct</span></div>
+            <div class="st"><b id="stW">0</b><span>Wrong</span></div>
+            <div class="st"><b id="stS">0</b><span>Unattempted</span></div>
+            <div class="st"><b id="stA">0</b><span>Attempted</span></div>
+          </div>
+        </div>
+        <table class="sec-table">
+          <thead><tr><th>Section</th><th>Correct</th><th>Wrong</th><th>Skip</th><th>Marks</th></tr></thead>
+          <tbody id="secBody"></tbody>
+        </table>
+        <div class="actions">
+          <button class="primary" id="retryBtn" style="width:auto">New random paper</button>
+          <button class="ghost" id="toggleReview">Show answer review</button>
+        </div>
+        <div id="reviewList" class="review-list hidden"></div>
+      </div>
+    </div>
+  </section>
+  <div class="modal" id="camModal">
+    <div class="modal-box">
+      <h3>Camera access</h3>
+      <p style="font-size:14px;line-height:1.5;color:#455a64">Official CBT shows a camera prompt. This practice site does not use your camera.</p>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="ghost" id="camSkip">Skip</button>
+        <button class="primary" id="camAllow" style="width:auto">Start practice test</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="subModal">
+    <div class="modal-box">
+      <h3>Submit practice test?</h3>
+      <p style="font-size:14px;line-height:1.5;color:#455a64">Once submitted you cannot change answers.</p>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="ghost" id="subNo">No, go back</button>
+        <button class="primary" id="subYes" style="width:auto;background:#2e7d32">Yes, submit</button>
+      </div>
+    </div>
+  </div>
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
