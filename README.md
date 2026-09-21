@@ -1,12 +1,12 @@
-# SSC CGL Tier-1 Practice CBT
+# SSC CGL Practice CBT
 
-Unofficial practice website that mimics the new SSC computer-based test interface.
+This is a practice website, not official SSC.
 
-- 100 questions, 200 marks, 60 minutes
-- 15 minutes per section (CGL 2026 lock)
-- +2 / −0.50 marking
-- Fresh randomised PYQ-style paper every attempt
+## If you only see a white page of text
+You opened the file on GitHub or opened HTML without the page engine.
 
-Open the live site after Vercel deploy. Local: open `index.html`.
+**Correct way:** download `index.html` (the new one is self-contained) and double-click it in Chrome / Edge / Firefox.
+Do not open the `.html` inside the GitHub code viewer.
 
-Not affiliated with the Staff Selection Commission.
+GitHub Pages URL after you enable Pages:
+https://aman0933sharma-png.github.io/ssc-cgl-practice-cbt/
